@@ -27,12 +27,6 @@ OT_VERSION ?= $(shell $(OT_CONFIG_CMD) --version)
 
 WINDEPS ?= $(OT_PREFIX)/../../distro/windows/openturns-developers-windeps
 
-# Module paths
-MOD_SRC    ?= $(PWD)/../..
-MOD_BUILD  ?= $(MOD_SRC)/build-$(TARGET)
-MOD_PREFIX ?= $(MOD_BUILD)/install
-MODULE_VERSION = $(shell cat $(MOD_SRC)/VERSION)
-
 # Wine
 WINE=/usr/bin/wine
 WINE_PREFIX = $(WINDEPS)/wine-$(ARCH)
@@ -52,6 +46,11 @@ PYTHON_EXECUTABLE=$(MINGW_PREFIX)/$(TARGET)/bin/python$(PYBASEVER_NODOT).exe
 export PYTHONHOME := $(MINGW_PREFIX)/$(TARGET)
 export PYTHONPATH := $(MINGW_PREFIX)/$(TARGET)/lib/python$(PYBASEVER_NODOT)
 
+# Module paths
+MOD_SRC    ?= $(PWD)/../..
+MOD_BUILD  ?= $(MOD_SRC)/build-py$(PYBASEVER)-OT$(OT_VERSION)-$(TARGET)
+MOD_PREFIX ?= $(MOD_BUILD)/install
+MODULE_VERSION = $(shell cat $(MOD_SRC)/VERSION)
 
 CMAKE=cmake
 
