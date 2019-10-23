@@ -1,6 +1,6 @@
-ottemplate (0.0-0.1) unstable; urgency=low
+ottemplate (0.0-0.1) experimental; urgency=low
 
   * Non-maintainer upload.
   * Initial release.
 
- -- Julien Schueller <schueller@phimeca.com>  Thu, 21 Feb 2013 08:06:41 +0100
+ -- Julien Schueller <schueller@phimeca.com>  Thu, 11 Sep 2014 08:06:41 +0100
