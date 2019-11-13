@@ -1,4 +1,5 @@
 # norootforbuild
+%{?__python2: %global __python %{__python2}}
 %{!?python_sitearch: %global python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
 
 %define __cmake %{_bindir}/cmake
@@ -32,6 +33,9 @@ BuildRequires:  gcc-gfortran
 BuildRequires:  openturns-devel
 BuildRequires:  python-openturns
 BuildRequires:  python-devel
+%if 0%{?fedora_version} >= 31
+BuildRequires:  python2-devel
+%endif
 Requires:       libottemplate0
 
 %description
@@ -73,7 +77,7 @@ Python textual interface to OTTemplate uncertainty library
 %build
 %cmake -DINSTALL_DESTDIR:PATH=%{buildroot} \
        -DCMAKE_SKIP_INSTALL_RPATH:BOOL=ON \
-       -DPYTHON_EXECUTABLE=/usr/bin/python \
+       -DPYTHON_EXECUTABLE=%{__python} \
        -DUSE_SPHINX=OFF .
 make %{?_smp_mflags}
 
