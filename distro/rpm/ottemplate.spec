@@ -1,6 +1,10 @@
 # norootforbuild
-%{?__python2: %global __python %{__python2}}
+%{?__python3: %global __python %{__python3}}
+%if 0%{?suse_version}
+%global python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")
+%else
 %{!?python_sitearch: %global python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
+%endif
 
 %define __cmake %{_bindir}/cmake
 %define _cmake_lib_suffix64 -DLIB_SUFFIX=64
@@ -31,11 +35,8 @@ BuildRequires:  gcc-fortran
 BuildRequires:  gcc-gfortran
 %endif
 BuildRequires:  openturns-devel
-BuildRequires:  python-openturns
-BuildRequires:  python-devel
-%if 0%{?fedora_version} >= 31
-BuildRequires:  python2-devel
-%endif
+BuildRequires:  python3-openturns
+BuildRequires:  python3-devel
 Requires:       libottemplate0
 
 %description
@@ -64,11 +65,11 @@ Group:          Productivity/Scientific/Math
 %description examples
 Example files for OTTemplate
 
-%package -n python-%{name}
+%package -n python3-%{name}
 Summary:        OTTemplate library
 Group:          Productivity/Scientific/Math
-Requires:       python-openturns
-%description -n python-%{name}
+Requires:       python3-openturns
+%description -n python3-%{name}
 Python textual interface to OTTemplate uncertainty library
 
 %prep
@@ -88,7 +89,6 @@ make install DESTDIR=%{buildroot}
 %check
 make tests %{?_smp_mflags}
 LD_LIBRARY_PATH=%{buildroot}%{_libdir} ctest %{?_smp_mflags} --output-on-failure
-rm %{buildroot}%{python_sitearch}/%{name}/*.pyc
 
 %clean
 rm -rf %{buildroot}
@@ -113,7 +113,7 @@ rm -rf %{buildroot}
 %dir %{_datadir}/%{name}
 %{_datadir}/%{name}/examples/
 
-%files -n python-%{name}
+%files -n python3-%{name}
 %defattr(-,root,root,-)
 %{python_sitearch}/%{name}/
 %{python_sitearch}/%{name}-*.dist-info/
