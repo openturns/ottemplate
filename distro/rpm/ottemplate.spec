@@ -29,11 +29,6 @@ URL:            http://www.openturns.org/
 Source0:        http://downloads.sourceforge.net/openturns-modules/ottemplate/ottemplate-%{version}.tar.bz2
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires:  gcc-c++, cmake, swig
-%if 0%{?suse_version}
-BuildRequires:  gcc-fortran
-%else
-BuildRequires:  gcc-gfortran
-%endif
 BuildRequires:  openturns-devel
 BuildRequires:  python3-openturns
 BuildRequires:  python3-devel
