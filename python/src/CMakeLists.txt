@@ -148,6 +148,7 @@ if (SPHINX_FOUND)
     ${SPHINX_SOURCE_DIR}/*.txt
     ${SPHINX_SOURCE_DIR}/*.in
     ${SPHINX_SOURCE_DIR}/*.inv
+    ${SPHINX_SOURCE_DIR}/*.ipynb
   )
 
   # copy sphinx sources
