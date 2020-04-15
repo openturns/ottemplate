@@ -5,7 +5,7 @@
 using namespace OT;
 using namespace OTTEMPLATE;
 
-int main(int argc, char **argv)
+int main()
 {
   MyClass a;
   std::cout << a << std::endl;
