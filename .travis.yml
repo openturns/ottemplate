@@ -1,5 +1,4 @@
 language: cpp
-sudo: required
 
 install:
   - curl http://ubuntu.openturns.org/openturns.org-repo.key | sudo apt-key add -
