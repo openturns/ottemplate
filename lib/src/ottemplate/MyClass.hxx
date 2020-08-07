@@ -54,7 +54,7 @@ public:
   OT::Point square(OT::Point & p) const;
 
   /** String converter */
-  OT::String __repr__() const;
+  OT::String __repr__() const override;
 
 private:
 
