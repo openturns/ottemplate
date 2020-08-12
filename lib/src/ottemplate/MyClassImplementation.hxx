@@ -44,19 +44,19 @@ public:
   MyClassImplementation();
 
   /** Virtual constructor method */
-  MyClassImplementation * clone() const;
+  MyClassImplementation * clone() const override;
 
   /** example of a func that return a point squared. **/
   OT::Point square(OT::Point& p) const;
 
   /** String converter */
-  OT::String __repr__() const;
+  OT::String __repr__() const override;
 
   /** Method save() stores the object through the StorageManager */
-  virtual void save(OT::Advocate & adv) const;
+  void save(OT::Advocate & adv) const override;
 
   /** Method load() reloads the object from the StorageManager */
-  virtual void load(OT::Advocate & adv);
+  void load(OT::Advocate & adv) override;
 
 private:
 
