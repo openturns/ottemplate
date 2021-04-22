@@ -58,26 +58,13 @@ if (BUILD_PYTHON)
     endif ()
 
     if (DEFINED PYTHON_SITE_PACKAGES)
-      set (OTTEMPLATE_PYTHON_MODULE_PATH ${PYTHON_SITE_PACKAGES})
-
+      set (OTTEMPLATE_PYTHON_MODULE_PATH "${PYTHON_SITE_PACKAGES}")
     else ()
-      execute_process ( COMMAND ${PYTHON_EXECUTABLE} -c "from distutils import sysconfig; print(sysconfig.get_python_lib(plat_specific=True, prefix='${CMAKE_INSTALL_PREFIX}'))"
-                        OUTPUT_VARIABLE _ABS_PYTHON_MODULE_PATH
-                        RESULT_VARIABLE _PYTHON_pythonlib_result
-                        OUTPUT_STRIP_TRAILING_WHITESPACE )
-
-      if (_PYTHON_pythonlib_result)
-        message (SEND_ERROR "Could not run ${PYTHON_EXECUTABLE}")
+     if (WIN32)
+       set (OTTEMPLATE_PYTHON_MODULE_PATH Lib/site-packages)
+     else ()
+       set (OTTEMPLATE_PYTHON_MODULE_PATH ${CMAKE_INSTALL_LIBDIR}/python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/site-packages)
       endif ()
-
-      get_filename_component (_ABS_PYTHON_MODULE_PATH ${_ABS_PYTHON_MODULE_PATH} ABSOLUTE)
-      file (RELATIVE_PATH OTTEMPLATE_PYTHON_MODULE_PATH ${CMAKE_INSTALL_PREFIX} ${_ABS_PYTHON_MODULE_PATH})
-    endif ()
-
-    if (IS_ABSOLUTE ${OTTEMPLATE_PYTHON_MODULE_PATH})
-      set (PYTHON_MODULE_PATH ${OTTEMPLATE_PYTHON_MODULE_PATH})
-    else ()
-      set (PYTHON_MODULE_PATH ${CMAKE_INSTALL_PREFIX}/${OTTEMPLATE_PYTHON_MODULE_PATH})
     endif ()
 
     set (OTTEMPLATE_PYTHON${PYTHON_VERSION_MAJOR}_MODULE_PATH ${OTTEMPLATE_PYTHON_MODULE_PATH})
