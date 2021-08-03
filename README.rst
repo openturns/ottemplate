@@ -1,5 +1,5 @@
-.. image:: https://travis-ci.org/openturns/ottemplate.svg?branch=master
-    :target: https://travis-ci.org/openturns/ottemplate
+.. image:: https://github.com/openturns/ottemplate/actions/workflows/build.yml/badge.svg?branch=master
+    :target: https://github.com/openturns/ottemplate/actions/workflows/build.yml
 
 OTTemplate Module
 =================
