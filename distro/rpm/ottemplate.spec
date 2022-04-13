@@ -27,7 +27,6 @@ Group:          System Environment/Libraries
 License:        LGPLv3+
 URL:            http://www.openturns.org/
 Source0:        http://downloads.sourceforge.net/openturns-modules/ottemplate/ottemplate-%{version}.tar.bz2
-BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires:  gcc-c++, cmake, swig
 BuildRequires:  openturns-devel
 BuildRequires:  python3-openturns
@@ -66,20 +65,14 @@ Python textual interface to OTTemplate uncertainty library
 %build
 %cmake -DINSTALL_DESTDIR:PATH=%{buildroot} \
        -DCMAKE_SKIP_INSTALL_RPATH:BOOL=ON \
-       -DPYTHON_EXECUTABLE=%{__python} \
        -DUSE_SPHINX=OFF .
 make %{?_smp_mflags}
 
 %install
-rm -rf %{buildroot}
 make install DESTDIR=%{buildroot}
 
 %check
-make tests %{?_smp_mflags}
-LD_LIBRARY_PATH=%{buildroot}%{_libdir} ctest %{?_smp_mflags} --output-on-failure
-
-%clean
-rm -rf %{buildroot}
+LD_LIBRARY_PATH=%{buildroot}%{_libdir} ctest %{?_smp_mflags} -R pyinstallcheck --output-on-failure --schedule-random
 
 %post -n libottemplate0 -p /sbin/ldconfig 
 %postun -n libottemplate0 -p /sbin/ldconfig 

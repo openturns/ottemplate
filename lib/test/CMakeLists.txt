@@ -1,5 +1,4 @@
 
-
 if (MINGW AND CMAKE_SIZEOF_VOID_P EQUAL 4)
   add_library (CRT_fp8 STATIC CRT_fp8.c)
 endif ()
