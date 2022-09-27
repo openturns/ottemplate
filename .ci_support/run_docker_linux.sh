@@ -2,6 +2,8 @@
 
 set -xe
 
+flake8 /io/python/ --max-line-length 100
+
 cd /tmp
 mkdir build && cd build
 cmake -DCMAKE_INSTALL_PREFIX=~/.local -DCMAKE_CXX_FLAGS="-Wall -Wextra -Werror" /io
