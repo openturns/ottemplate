@@ -9,7 +9,6 @@
 
 # Use the following variables to compile and link against OTTemplate:
 #  OTTEMPLATE_FOUND          - True if OTTemplate was found on your system
-#  OTTEMPLATE_USE_FILE       - The file making OTTemplate usable
 #  OTTEMPLATE_DEFINITIONS    - Definitions needed to build with OTTemplate
 #  OTTEMPLATE_INCLUDE_DIRS   - List of directories where OTTemplate' header file are
 #  OTTEMPLATE_LIBRARY        - Library name
@@ -24,7 +23,6 @@
 @PACKAGE_INIT@
 
 set ( OTTEMPLATE_FOUND 1 )
-set ( OTTEMPLATE_USE_FILE     "@PACKAGE_OTTEMPLATE_USE_FILE@" )
 
 set ( OTTEMPLATE_DEFINITIONS  "@OTTEMPLATE_DEFINITIONS@" )
 set_and_check (OTTEMPLATE_INCLUDE_DIR  "@PACKAGE_OTTEMPLATE_INCLUDE_DIR@")
