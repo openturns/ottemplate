@@ -1,20 +1,31 @@
-cmake_minimum_required (VERSION 3.2)
+cmake_minimum_required (VERSION 3.13)
 
 option (BUILD_PYTHON                 "Build the python module for the library"                               ON)
 option (USE_SPHINX                   "Use sphinx for documentation"                                          ON)
 option (BUILD_SHARED_LIBS            "Build shared libraries"                                                ON)
 
 # By default, build in Release mode. Must appear before project() command
-if ( NOT DEFINED CMAKE_BUILD_TYPE )
-   set( CMAKE_BUILD_TYPE Release CACHE STRING "Build type")
-endif ()
+set( CMAKE_BUILD_TYPE Release CACHE STRING "Build type")
 
 project (OTTemplate)
 
-string ( TOLOWER ${CMAKE_PROJECT_NAME} PACKAGE_NAME )
+string (TOLOWER ${CMAKE_PROJECT_NAME} PACKAGE_NAME)
 
 # set module dir to find custom scripts
-list ( APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake )
+list (APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
+
+if (POLICY CMP0042)
+  # MACOSX_RPATH is enabled by default
+  cmake_policy(SET CMP0042 NEW)
+endif()
+if (POLICY CMP0078)
+  # UseSWIG generates standard target names
+  cmake_policy(SET CMP0078 NEW)
+endif()
+if (POLICY CMP0086)
+  # UseSWIG honors SWIG_MODULE_NAME via -module flag
+  cmake_policy(SET CMP0086 NEW)
+endif()
 
 find_package (OpenTURNS CONFIG REQUIRED)
 message (STATUS "Found OpenTURNS: ${OPENTURNS_ROOT_DIR} (found version \"${OPENTURNS_VERSION_STRING}\")")
@@ -47,11 +58,19 @@ set (CMAKE_CXX_STANDARD 11)
 
 if (BUILD_PYTHON)
   find_package (SWIG 3)
+  include (${SWIG_USE_FILE})
 
-  find_package (PythonInterp)
-  if (PYTHONINTERP_FOUND)
-    find_package (PythonLibs ${PYTHON_VERSION_STRING} EXACT)
+  if (CMAKE_VERSION VERSION_LESS 3.24)
+    find_package (Python 3.5 COMPONENTS Interpreter Development)
+  else ()
+    find_package (Python 3.5 COMPONENTS Interpreter Development.Module)
+  endif ()
+
+  if (Python_FOUND)
     include (FindPythonModule)
+    if (NOT TARGET Python::Module)
+      include (TargetLinkLibrariesWithDynamicLookup)
+    endif ()
 
     if (USE_SPHINX)
       find_program (SPHINX_EXECUTABLE NAMES sphinx-build DOC "Sphinx Documentation Builder (sphinx-doc.org)")
@@ -70,12 +89,10 @@ if (BUILD_PYTHON)
      if (WIN32)
        set (OTTEMPLATE_PYTHON_MODULE_PATH Lib/site-packages)
      else ()
-       set (OTTEMPLATE_PYTHON_MODULE_PATH ${CMAKE_INSTALL_LIBDIR}/python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/site-packages)
+       set (OTTEMPLATE_PYTHON_MODULE_PATH ${CMAKE_INSTALL_LIBDIR}/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/site-packages)
       endif ()
     endif ()
-
-    set (OTTEMPLATE_PYTHON${PYTHON_VERSION_MAJOR}_MODULE_PATH ${OTTEMPLATE_PYTHON_MODULE_PATH})
-  endif ( PYTHONINTERP_FOUND )
+  endif ()
 endif ()
 
 
@@ -94,18 +111,6 @@ endforeach ()
 # RPATH settings
 set (CMAKE_INSTALL_RPATH ${LIBRARY_PATH})
 set (CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
-if (POLICY CMP0042)
-  # MACOSX_RPATH is enabled by default
-  cmake_policy(SET CMP0042 NEW)
-endif()
-if (POLICY CMP0078)
-  # UseSWIG generates standard target names
-  cmake_policy(SET CMP0078 NEW)
-endif()
-if (POLICY CMP0086)
-  # UseSWIG honors SWIG_MODULE_NAME via -module flag
-  cmake_policy(SET CMP0086 NEW)
-endif()
 
 # Some useful macros to ease CMakeLists.txt file writing
 set (SOURCEFILES "" CACHE INTERNAL "List of source files to compile")
@@ -156,7 +161,7 @@ add_custom_target (installcheck COMMENT "Run post-installation tests")
 add_subdirectory (lib)
 add_dependencies (check cppcheck)
 
-if (PYTHONINTERP_FOUND AND PYTHONLIBS_FOUND AND SWIG_FOUND)
+if (Python_FOUND AND SWIG_FOUND)
   add_subdirectory (python)
   add_dependencies (installcheck pyinstallcheck)
 endif ()

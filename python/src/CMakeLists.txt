@@ -1,12 +1,8 @@
 
-include (${SWIG_USE_FILE})
-include (TargetLinkLibrariesWithDynamicLookup)
-
 include_directories (${OPENTURNS_INCLUDE_DIRS})
 include_directories (${OPENTURNS_SWIG_INCLUDE_DIRS})
 add_definitions (${OPENTURNS_SWIG_DEFINITIONS})
 include_directories (${INTERNAL_INCLUDE_DIRS})
-include_directories (${PYTHON_INCLUDE_DIRS})
 
 macro (ot_add_python_module MODULENAME SOURCEFILE)
   set_source_files_properties (${SOURCEFILE} PROPERTIES CPLUSPLUS ON)
@@ -48,28 +44,21 @@ macro (ot_add_python_module MODULENAME SOURCEFILE)
   list (APPEND SWIG_MODULE_${MODULENAME}_python_EXTRA_DEPS generate_${MODULENAME}_docstrings)
 
   # swig_add_module is deprecated
-  if (CMAKE_VERSION VERSION_LESS 3.8)
-    swig_add_module (${MODULENAME}_python python ${SOURCEFILE} ${swig_other_sources} )
-  else ()
-    swig_add_library (${MODULENAME}_python LANGUAGE python SOURCES ${SOURCEFILE} ${swig_other_sources})
-  endif ()
+  swig_add_library (${MODULENAME}_python LANGUAGE python SOURCES ${SOURCEFILE} ${swig_other_sources})
 
   # UseSWIG generates now standard target names
-  if (CMAKE_VERSION VERSION_LESS 3.13)
-    set (module_target ${SWIG_MODULE_${MODULENAME}_python_REAL_NAME})
-  else ()
-    set (module_target ${MODULENAME}_python)
-  endif ()
+  set (module_target ${MODULENAME}_python)
 
   swig_link_libraries (${MODULENAME}_python ottemplate)
+  target_include_directories (${MODULENAME}_python PRIVATE ${Python_INCLUDE_DIRS})
 
-  target_link_libraries_with_dynamic_lookup (${module_target} ${PYTHON_LIBRARIES})
+  if (TARGET Python::Module)
+    target_link_libraries (${module_target} Python::Module)
+  else ()
+    target_link_libraries_with_dynamic_lookup (${module_target} ${Python_LIBRARIES})
+  endif ()
 
   set_target_properties (${module_target} PROPERTIES OUTPUT_NAME ${MODULENAME})
-
-  if (CMAKE_VERSION VERSION_LESS 3.13)
-    set_target_properties (${module_target} PROPERTIES PREFIX "_")
-  endif ()
 
   install (FILES ${CMAKE_CURRENT_BINARY_DIR}/${MODULENAME}.py
            DESTINATION ${OTTEMPLATE_PYTHON_MODULE_PATH}/${PACKAGE_NAME})
@@ -120,9 +109,6 @@ if (SPHINX_FOUND)
 
   file (MAKE_DIRECTORY ${SPHINX_BINARY_DIR}/_static) # currently empty
 
-  if (NOT DEFINED OPENTURNS_PYTHON_MODULE_PATH)
-    set(OPENTURNS_PYTHON_MODULE_PATH ${OPENTURNS_PYTHON${PYTHON_VERSION_MAJOR}_MODULE_PATH})
-  endif ()
   configure_file (${SPHINX_SOURCE_DIR}/conf.py.in ${SPHINX_BINARY_DIR}/conf.py @ONLY)
 
   # get sphinx sources
@@ -175,11 +161,7 @@ if (SPHINX_FOUND)
                         DEPENDS ${sphinx_clones}
                       )
     foreach (MODULENAME ${OTTEMPLATE_PYTHON_MODULES})
-      if (CMAKE_VERSION VERSION_LESS 3.13)
-        set (module_target ${SWIG_MODULE_${MODULENAME}_python_REAL_NAME})
-      else ()
-        set (module_target ${MODULENAME}_python)
-      endif ()
+      set (module_target ${MODULENAME}_python)
       add_dependencies (sphinx_${format} ${module_target})
     endforeach ()
   endforeach ()
