@@ -3,46 +3,49 @@ include (${SWIG_USE_FILE})
 include (TargetLinkLibrariesWithDynamicLookup)
 
 include_directories (${OPENTURNS_INCLUDE_DIRS})
-include_directories ( ${OPENTURNS_SWIG_INCLUDE_DIRS} )
-add_definitions( ${OPENTURNS_SWIG_DEFINITIONS} )
-include_directories ( ${INTERNAL_INCLUDE_DIRS} )
-include_directories ( ${PYTHON_INCLUDE_DIRS} )
+include_directories (${OPENTURNS_SWIG_INCLUDE_DIRS})
+add_definitions (${OPENTURNS_SWIG_DEFINITIONS})
+include_directories (${INTERNAL_INCLUDE_DIRS})
+include_directories (${PYTHON_INCLUDE_DIRS})
 
-add_custom_target( generate_docstrings )
-
-macro ( ot_add_python_module MODULENAME SOURCEFILE )
-  set_source_files_properties ( ${SOURCEFILE} PROPERTIES CPLUSPLUS ON )
-  set_source_files_properties ( ${SOURCEFILE} PROPERTIES SWIG_MODULE_NAME ${MODULENAME} )
-  ot_install_swig_file ( ${SOURCEFILE} )
+macro (ot_add_python_module MODULENAME SOURCEFILE)
+  set_source_files_properties (${SOURCEFILE} PROPERTIES CPLUSPLUS ON)
+  set_source_files_properties (${SOURCEFILE} PROPERTIES SWIG_MODULE_NAME ${MODULENAME})
+  ot_install_swig_file (${SOURCEFILE})
   if (${ARGC} GREATER 2)
     set (SWIG_MODULE_${MODULENAME}_python_EXTRA_DEPS ${ARGN})
-    list (APPEND SWIG_MODULE_${MODULENAME}_python_EXTRA_DEPS generate_docstrings)
   endif ()
 
-  set ( swig_other_sources )
-  foreach ( it ${ARGN} )
-    if ( ${it} MATCHES ".*\\.i$" )
-      ot_install_swig_file ( ${it} )
-    elseif(${it} MATCHES ".*_doc\\.i\\.in$")
-      # handle docstring generation
-      set (DOCSTRING_IN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/${it})
-      get_filename_component (DOCSTRING_FILE_BASENAME ${DOCSTRING_IN_FILE} NAME_WE)
-      # https://github.com/swig/swig/issues/1273
-      option (SWIG_FORCE_DOUBLE_ESCAPE_BACKSLASH "Force double escaping of backslashes" OFF)
-      mark_as_advanced (SWIG_FORCE_DOUBLE_ESCAPE_BACKSLASH)
-      set (TIMES x1)
-      if ((SWIG_VERSION VERSION_LESS 4) OR SWIG_FORCE_DOUBLE_ESCAPE_BACKSLASH)
-        set (TIMES x2)
-      endif ()
-      add_custom_target (generate_${DOCSTRING_FILE_BASENAME}
-                          COMMAND ${CMAKE_COMMAND} -DDOCSTRING_IN_FILE=${DOCSTRING_IN_FILE} -DDOCSTRING_FILE=${CMAKE_CURRENT_BINARY_DIR}/${DOCSTRING_FILE_BASENAME}.i -DTIMES=${TIMES} -P ${CMAKE_SOURCE_DIR}/cmake/escape_backslash.cmake
-                          DEPENDS ${DOCSTRING_IN_FILE})
-      add_dependencies ( generate_docstrings generate_${DOCSTRING_FILE_BASENAME})
-      list (APPEND SWIGFILES ${CMAKE_CURRENT_BINARY_DIR}/${DOCSTRING_FILE_BASENAME}.i)
+  set (swig_other_sources)
+  set (docstring_sources)
+  foreach (it ${ARGN})
+    if (${it} MATCHES ".*\\.i$")
+      ot_install_swig_file (${it})
+    elseif (${it} MATCHES ".*_doc\\.i\\.in$")
+      list (APPEND docstring_sources ${it})
+
+      get_filename_component (DOCSTRING_FILE_BASENAME ${it} NAME_WE)
+      ot_install_swig_file (${CMAKE_CURRENT_BINARY_DIR}/${DOCSTRING_FILE_BASENAME}.i)
     else ()
-      set (swig_other_sources ${swig_other_sources} "${it}")
+      list (APPEND swig_other_sources "${it}")
     endif ()
   endforeach ()
+
+  # https://github.com/swig/swig/issues/1273
+  option (SWIG_FORCE_DOUBLE_ESCAPE_BACKSLASH "Force double escaping of backslashes" OFF)
+  mark_as_advanced (SWIG_FORCE_DOUBLE_ESCAPE_BACKSLASH)
+  set (TIMES x1)
+  if ((SWIG_VERSION VERSION_LESS 4) OR SWIG_FORCE_DOUBLE_ESCAPE_BACKSLASH)
+    set (TIMES x2)
+  endif ()
+
+  # handle docstring generation
+  add_custom_target (generate_${MODULENAME}_docstrings
+                      COMMAND ${CMAKE_COMMAND} -DDOCSTRING_SOURCES="${docstring_sources}"
+                      -DCURRENT_SOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR} -DTIMES=${TIMES}
+                      -P ${CMAKE_SOURCE_DIR}/cmake/escape_backslash.cmake
+                      DEPENDS ${docstring_sources})
+  list (APPEND SWIG_MODULE_${MODULENAME}_python_EXTRA_DEPS generate_${MODULENAME}_docstrings)
 
   # swig_add_module is deprecated
   if (CMAKE_VERSION VERSION_LESS 3.8)
@@ -87,12 +90,6 @@ ot_add_python_module( ${PACKAGE_NAME} ${PACKAGE_NAME}_module.i
 install ( FILES __init__.py
           DESTINATION ${OTTEMPLATE_PYTHON_MODULE_PATH}/${PACKAGE_NAME}
         )
-
-install ( FILES ${SWIGFILES}
-          DESTINATION ${OTTEMPLATE_SWIG_INCLUDE_DIRS}
-        )
-
-
 
 
 if (SPHINX_FOUND)
