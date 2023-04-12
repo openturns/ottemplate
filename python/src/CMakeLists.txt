@@ -4,6 +4,9 @@ include_directories (${OPENTURNS_SWIG_INCLUDE_DIRS})
 add_definitions (${OPENTURNS_SWIG_DEFINITIONS})
 include_directories (${INTERNAL_INCLUDE_DIRS})
 
+# allows one to pass compile flags like -O1 to reduce memory usage
+set (SWIG_COMPILE_FLAGS "" CACHE STRING "C++ compiler flags used for wrapper code")
+
 macro (ot_add_python_module MODULENAME SOURCEFILE)
   set_source_files_properties (${SOURCEFILE} PROPERTIES CPLUSPLUS ON)
   set_source_files_properties (${SOURCEFILE} PROPERTIES SWIG_MODULE_NAME ${MODULENAME})
@@ -59,6 +62,10 @@ macro (ot_add_python_module MODULENAME SOURCEFILE)
   endif ()
 
   set_target_properties (${module_target} PROPERTIES OUTPUT_NAME ${MODULENAME})
+
+  set_target_properties (${module_target} PROPERTIES COMPILE_FLAGS "${SWIG_COMPILE_FLAGS}")
+
+  set_target_properties (${module_target} PROPERTIES UNITY_BUILD OFF)
 
   install (FILES ${CMAKE_CURRENT_BINARY_DIR}/${MODULENAME}.py
            DESTINATION ${OTTEMPLATE_PYTHON_MODULE_PATH}/${PACKAGE_NAME})
@@ -127,7 +134,6 @@ if (SPHINX_FOUND)
     ${SPHINX_SOURCE_DIR}/*.txt
     ${SPHINX_SOURCE_DIR}/*.in
     ${SPHINX_SOURCE_DIR}/*.inv
-    ${SPHINX_SOURCE_DIR}/*.ipynb
   )
 
   # copy sphinx sources
