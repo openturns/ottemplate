@@ -65,6 +65,17 @@ endmacro ()
 ot_pyinstallcheck_test (MyClass_std)
 ot_pyinstallcheck_test (docstring)
 
+if (MATPLOTLIB_FOUND)
+  file (GLOB_RECURSE PYFILES "${PROJECT_SOURCE_DIR}/python/doc/examples/*.py")
+  foreach (PYF ${PYFILES})
+    if (PYF MATCHES plot)
+      get_filename_component (TESTNAME "${PYF}" NAME_WE)
+      add_test (NAME pyinstallcheck_example_${TESTNAME} COMMAND ${Python_EXECUTABLE} ${PYF})
+      set_tests_properties (pyinstallcheck_example_${TESTNAME} PROPERTIES ENVIRONMENT "${PYINSTALLCHECK_ENVIRONMENT}")
+    endif ()
+  endforeach ()
+endif ()
+
 add_custom_target ( pyinstallcheck COMMAND ${CMAKE_CTEST_COMMAND} -R "^pyinstallcheck_"
                     DEPENDS ${PYINSTALLCHECK_TO_BE_RUN}
                     COMMENT "Run Python post-installation tests" )
