@@ -12,7 +12,7 @@ Example 1: Axial stressed beam
 #  - :math:`sigma`, Axial stress, LogNormal(300, 30)
 #  - D, diameter, 20.0
 #
-# Output: Primary energy savings :math:`G` 
+# Output: Primary energy savings :math:`G`
 #
 # .. math::
 #
@@ -27,4 +27,3 @@ a = ottemplate.MyClass()
 p = ot.Point([2, 3])
 squared_p = a.square(p)
 print(squared_p)
-
