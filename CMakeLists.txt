@@ -7,7 +7,7 @@ option (BUILD_SHARED_LIBS            "Build shared libraries"                   
 # By default, build in Release mode. Must appear before project() command
 set( CMAKE_BUILD_TYPE Release CACHE STRING "Build type")
 
-project (OTTemplate)
+project (ottemplate)
 
 string (TOLOWER ${CMAKE_PROJECT_NAME} PACKAGE_NAME)
 
@@ -43,16 +43,14 @@ if (MSVC)
   set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4197 /wd4244 /wd4251 /wd4267 /wd4996")
 endif ()
 
-if (NOT DEFINED CMAKE_INSTALL_LIBDIR)
-  set (CMAKE_INSTALL_LIBDIR lib${LIB_SUFFIX})
-endif ()
+include (GNUInstallDirs)
 
 set (OTTEMPLATE_LIBRARY_PATH ${CMAKE_INSTALL_LIBDIR})
-set (OTTEMPLATE_INCLUDE_PATH include)
+set (OTTEMPLATE_INCLUDE_PATH ${CMAKE_INSTALL_INCLUDEDIR})
 set (OTTEMPLATE_SWIG_INCLUDE_DIRS ${OTTEMPLATE_INCLUDE_PATH}/${PACKAGE_NAME}/swig)
-set (OTTEMPLATE_DATA_PATH share)
+set (OTTEMPLATE_DATA_PATH ${CMAKE_INSTALL_DATAROOTDIR})
 set (OTTEMPLATE_CONFIG_CMAKE_PATH ${CMAKE_INSTALL_LIBDIR}/cmake/ottemplate)
-set (OTTEMPLATE_DOC_PATH share/${PACKAGE_NAME}/doc)
+set (OTTEMPLATE_DOC_PATH ${CMAKE_INSTALL_DOCDIR})
 
 set (CMAKE_CXX_STANDARD 11)
 
@@ -85,14 +83,10 @@ if (BUILD_PYTHON)
       endif ()
     endif ()
 
-    if (DEFINED PYTHON_SITE_PACKAGES)
-      set (OTTEMPLATE_PYTHON_MODULE_PATH "${PYTHON_SITE_PACKAGES}")
+    if (WIN32)
+      set (OTTEMPLATE_PYTHON_MODULE_PATH Lib/site-packages CACHE PATH "site-packages dir")
     else ()
-     if (WIN32)
-       set (OTTEMPLATE_PYTHON_MODULE_PATH Lib/site-packages)
-     else ()
-       set (OTTEMPLATE_PYTHON_MODULE_PATH ${CMAKE_INSTALL_LIBDIR}/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/site-packages)
-      endif ()
+      set (OTTEMPLATE_PYTHON_MODULE_PATH ${CMAKE_INSTALL_LIBDIR}/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/site-packages CACHE PATH "site-packages dir")
     endif ()
   endif ()
 endif ()
@@ -129,11 +123,11 @@ macro (ot_install_swig_file FILENAME)
   install (FILES ${FILENAME} DESTINATION ${OTTEMPLATE_SWIG_INCLUDE_DIRS})
 endmacro ()
 
-set ( INTERNAL_INCLUDE_DIRS "" CACHE INTERNAL "List of directories with header files needed for build" )
-macro ( ot_add_current_dir_to_include_dirs )
-  set ( inc_dirs ${INTERNAL_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR} )
-  set ( INTERNAL_INCLUDE_DIRS ${inc_dirs} CACHE INTERNAL "List of directories with header files needed for build" )
-endmacro ( ot_add_current_dir_to_include_dirs )
+set (INTERNAL_INCLUDE_DIRS "" CACHE INTERNAL "List of directories with header files needed for build")
+macro (ot_add_current_dir_to_include_dirs)
+  set (inc_dirs ${INTERNAL_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR})
+  set (INTERNAL_INCLUDE_DIRS ${inc_dirs} CACHE INTERNAL "List of directories with header files needed for build")
+endmacro ()
 
 
 set ( CPACK_PACKAGE_NAME          ${PACKAGE_NAME} )
