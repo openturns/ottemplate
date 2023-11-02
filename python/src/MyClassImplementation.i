@@ -9,4 +9,4 @@
 %template(MyClassImplementationdInterfaceObject)           OT::TypedInterfaceObject<OTTEMPLATE::MyClassImplementation>;
 
 %include ottemplate/MyClassImplementation.hxx
-namespace OTTEMPLATE { %extend MyClassImplementation { MyClassImplementation(const MyClassImplementation & other) { return new OTTEMPLATE::MyClassImplementation(other); } } }
+%copyctor OTTEMPLATE::MyClassImplementation;

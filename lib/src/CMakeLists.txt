@@ -23,9 +23,9 @@ endif ()
 if ( NOT DEFINED LIB_SOVERSION ) 
   set ( LIB_SOVERSION 0 )
 endif ()
-set_target_properties ( ottemplate PROPERTIES VERSION ${LIB_VERSION} )
-set_target_properties ( ottemplate PROPERTIES SOVERSION ${LIB_SOVERSION} )
-target_link_libraries (ottemplate ${OPENTURNS_LIBRARY})
+set_target_properties (ottemplate PROPERTIES VERSION ${LIB_VERSION})
+set_target_properties (ottemplate PROPERTIES SOVERSION ${LIB_SOVERSION})
+target_link_libraries (ottemplate PUBLIC ${OPENTURNS_LIBRARY})
 
 # Add targets to the build-tree export set
 export (TARGETS ottemplate FILE ${PROJECT_BINARY_DIR}/OTTemplate-Targets.cmake)
