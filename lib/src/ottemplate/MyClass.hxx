@@ -40,7 +40,7 @@ class MyClassImplementation;
 class OTTEMPLATE_API MyClass
   : public OT::TypedInterfaceObject<MyClassImplementation>
 {
-  CLASSNAME;
+  CLASSNAME
 
 public:
 

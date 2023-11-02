@@ -37,7 +37,7 @@ namespace OTTEMPLATE
 class OTTEMPLATE_API MyClassImplementation
   : public OT::PersistentObject
 {
-  CLASSNAME;
+  CLASSNAME
 
 public:
   /** Default constructor */
