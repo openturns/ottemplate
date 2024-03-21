@@ -6,7 +6,6 @@
 
 %include MyClass_doc.i
 
-TypedInterfaceObjectImplementationHelper(OTTEMPLATE, MyClass, MyClassImplementation)
+%copyctor OTTEMPLATE::MyClass;
 
 %include ottemplate/MyClass.hxx
-%copyctor OTTEMPLATE::MyClass;

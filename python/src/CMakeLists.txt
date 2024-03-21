@@ -79,7 +79,6 @@ endmacro ()
 
 ot_add_python_module( ${PACKAGE_NAME} ${PACKAGE_NAME}_module.i 
                       MyClass.i MyClass_doc.i.in
-                      MyClassImplementation.i MyClassImplementation_doc.i.in
                     )
 
 

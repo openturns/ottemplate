@@ -2,7 +2,7 @@
 /**
  *  @brief The external header file of OTTemplate
  *
- *  Copyright 2005-2020 Airbus-EDF-IMACS-ONERA-Phimeca
+ *  Copyright 2005-2024 Airbus-EDF-IMACS-ONERA-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -22,7 +22,6 @@
 #ifndef OTTEMPLATE_OTTEMPLATE_HXX
 #define OTTEMPLATE_OTTEMPLATE_HXX
 
-#include "ottemplate/MyClassImplementation.hxx"
 #include "ottemplate/MyClass.hxx"
 
 #endif // OTTEMPLATE_OTTEMPLATE_HXX

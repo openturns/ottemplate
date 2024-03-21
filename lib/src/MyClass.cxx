@@ -2,7 +2,7 @@
 /**
  *  @brief MyClass
  *
- *  Copyright 2005-2020 Airbus-EDF-IMACS-ONERA-Phimeca
+ *  Copyright 2005-2024 Airbus-EDF-IMACS-ONERA-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -19,7 +19,6 @@
  *
  */
 #include "ottemplate/MyClass.hxx"
-#include "ottemplate/MyClassImplementation.hxx"
 #include <openturns/PersistentObjectFactory.hxx>
 
 using namespace OT;
@@ -29,32 +28,52 @@ namespace OTTEMPLATE
 
 CLASSNAMEINIT(MyClass);
 
+static Factory<MyClass> Factory_MyClass;
+
+
 /* Default constructor */
 MyClass::MyClass()
-  : TypedInterfaceObject<MyClassImplementation>(new MyClassImplementation)
+  : PersistentObject()
 {
   // Nothing to do
 }
 
-
-MyClass::MyClass(const MyClassImplementation & implementation)
-  : TypedInterfaceObject<MyClassImplementation>(implementation.clone())
+/* Virtual constructor method */
+MyClass * MyClass::clone() const
 {
-  // Nothing to do
+  return new MyClass(*this);
 }
 
-Point MyClass::square(Point & p) const
+/* example of a func that return a point squared. */
+Point MyClass::square(Point& p) const
 {
-  return getImplementation()->square(p);
+
+  Point p_out(p.getSize());
+  for(UnsignedInteger i = 0; i < p.getSize(); ++ i)
+  {
+    p_out[i] = p[i] * p[i];
+  }
+  return p_out;
 }
 
 /* String converter */
 String MyClass::__repr__() const
 {
   OSS oss;
-  oss << "class=" << MyClass::GetClassName()
-      << " implementation=" << getImplementation()->__repr__();
+  oss << "class=" << MyClass::GetClassName();
   return oss;
+}
+
+/* Method save() stores the object through the StorageManager */
+void MyClass::save(Advocate & adv) const
+{
+  PersistentObject::save( adv );
+}
+
+/* Method load() reloads the object from the StorageManager */
+void MyClass::load(Advocate & adv)
+{
+  PersistentObject::load( adv );
 }
 
 

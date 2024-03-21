@@ -1,7 +1,36 @@
-// MyClass docstrings are defined in MyClassImplementation_doc.i.in
-
 %feature("docstring") OTTEMPLATE::MyClass
-OTTEMPLATE_MyClass_doc
+"MyClass class.
+
+Examples
+--------
+>>> import ottemplate
+>>> a = ottemplate.MyClass()
+
+Notes
+-----
+Template module class."
+
+// ---------------------------------------------------------------------
+
 %feature("docstring") OTTEMPLATE::MyClass::square
-OTTEMPLATE_MyClass_square_doc
+"Square of a point.
+
+Parameters
+----------
+point : sequence of float 
+    Input point
+
+Returns
+-------
+square : :py:class:`openturns.Point`
+    Square of point
+                  
+Examples
+--------
+>>> import openturns as ot
+>>> import ottemplate
+>>> a = ottemplate.MyClass()
+>>> point = ot.Point([1.0, 2.0, 3.0])
+>>> a.square(point)
+class=Point name=Unnamed dimension=3 values=[1,4,9]"
 

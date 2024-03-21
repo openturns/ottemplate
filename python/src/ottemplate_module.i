@@ -18,7 +18,6 @@
 
 // The new classes
 %include ottemplate/OTTemplateprivate.hxx
-%include MyClassImplementation.i
 %include MyClass.i
 
 

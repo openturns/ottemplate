@@ -2,7 +2,7 @@
 /**
  *  @brief MyClass
  *
- *  Copyright 2005-2020 Airbus-EDF-IMACS-ONERA-Phimeca
+ *  Copyright 2005-2024 Airbus-EDF-IMACS-ONERA-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -21,7 +21,7 @@
 #ifndef OTTEMPLATE_MYCLASS_HXX
 #define OTTEMPLATE_MYCLASS_HXX
 
-#include <openturns/TypedInterfaceObject.hxx>
+#include <openturns/PersistentObject.hxx>
 #include <openturns/StorageManager.hxx>
 #include <openturns/Point.hxx>
 #include "ottemplate/OTTemplateprivate.hxx"
@@ -29,32 +29,34 @@
 namespace OTTEMPLATE
 {
 
-/* forward declaration */
-class MyClassImplementation;
-
 /**
  * @class MyClass
  *
- * MyClass is some myclass type to illustrate how to add some classes in Open TURNS
+ * MyClass is some myclass type to illustrate how to add some classes in OpenTURNS
  */
 class OTTEMPLATE_API MyClass
-  : public OT::TypedInterfaceObject<MyClassImplementation>
+  : public OT::PersistentObject
 {
   CLASSNAME
 
 public:
-
   /** Default constructor */
   MyClass();
 
-  /** Constructor from implementation */
-  MyClass(const MyClassImplementation & implementation);
+  /** Virtual constructor method */
+  MyClass * clone() const override;
 
-  /** a func that return a point squared. **/
-  OT::Point square(OT::Point & p) const;
+  /** example of a func that return a point squared. **/
+  OT::Point square(OT::Point& p) const;
 
   /** String converter */
   OT::String __repr__() const override;
+
+  /** Method save() stores the object through the StorageManager */
+  void save(OT::Advocate & adv) const override;
+
+  /** Method load() reloads the object from the StorageManager */
+  void load(OT::Advocate & adv) override;
 
 private:
 

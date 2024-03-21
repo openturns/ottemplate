@@ -1,7 +1,7 @@
 #!/bin/sh
 #                                               -*- Shell-script -*-
 #
-#  Copyright 2005-2020 Airbus-EDF-IMACS-Phimeca
+#  Copyright 2005-2024 Airbus-EDF-IMACS-Phimeca
 #
 #  This library is free software; you can redistribute it and/or
 #  modify it under the terms of the GNU Lesser General Public
@@ -67,7 +67,7 @@ sed -i "s|ottemplate .................................................     0 tes
 case $# in
   2)
 
-    filelist_1="README.rst cmake/OTTemplateConfig.cmake.in CMakeLists.txt lib/CMakeLists.txt lib/include/CMakeLists.txt lib/include/ottemplate/OTTemplateprivate.hxx lib/include/ottemplate/OTTemplate.hxx lib/src/ottemplate/MyClass.hxx lib/src/MyClass.cxx lib/src/ottemplate/MyClassImplementation.hxx lib/src/MyClassImplementation.cxx lib/src/CMakeLists.txt lib/test/t_MyClass_std.cxx lib/test/t_MyClass_std.expout lib/test/CMakeLists.txt python/test/t_MyClass_std.py python/test/CMakeLists.txt python/src/__init__.py python/src/MyClass.i python/src/MyClass_doc.i.in python/src/CMakeLists.txt python/src/MyClassImplementation.i python/src/MyClassImplementation_doc.i.in python/src/ottemplate_module.i distro/debian/changelog distro/debian/control distro/debian/rules distro/windows/installer.nsi distro/windows/README.txt python/doc/index.rst python/doc/conf.py.in python/doc/user_manual/user_manual.rst python/doc/developer_guide/architecture/architecture.rst distro/rpm/ottemplate.spec python/test/t_docstring.py python/test/t_docstring.expout"
+    filelist_1="README.rst cmake/OTTemplateConfig.cmake.in CMakeLists.txt lib/CMakeLists.txt lib/include/CMakeLists.txt lib/include/ottemplate/OTTemplateprivate.hxx lib/include/ottemplate/OTTemplate.hxx lib/src/ottemplate/MyClass.hxx lib/src/MyClass.cxx lib/src/CMakeLists.txt lib/test/t_MyClass_std.cxx lib/test/t_MyClass_std.expout lib/test/CMakeLists.txt python/test/t_MyClass_std.py python/test/CMakeLists.txt python/src/__init__.py python/src/MyClass.i python/src/MyClass_doc.i.in python/src/CMakeLists.txt python/src/ottemplate_module.i distro/debian/changelog distro/debian/control distro/debian/rules distro/windows/installer.nsi distro/windows/README.txt python/doc/index.rst python/doc/conf.py.in python/doc/user_manual/user_manual.rst python/doc/developer_guide/architecture/architecture.rst distro/rpm/ottemplate.spec python/test/t_docstring.py python/test/t_docstring.expout"
     for file in $filelist_1
     do
       if test -f "$file"
@@ -100,7 +100,7 @@ case $# in
 
 
 
-    filelist_1="python/src/${module_newname}_module.i CMakeLists.txt python/src/MyClass.i python/src/MyClass_doc.i.in python/src/CMakeLists.txt python/src/MyClassImplementation.i python/src/MyClassImplementation_doc.i.in lib/src/${module_newname}/MyClass.hxx lib/src/MyClass.cxx lib/src/${module_newname}/MyClassImplementation.hxx lib/include/${module_newname}/${module_Newname}.hxx lib/src/MyClassImplementation.cxx lib/src/CMakeLists.txt lib/test/CMakeLists.txt lib/test/t_MyClass_std.cxx lib/test/t_MyClass_std.expout python/test/CMakeLists.txt python/test/t_MyClass_std.py python/doc/user_manual/user_manual.rst python/test/t_MyClass_std.expout"
+    filelist_1="python/src/${module_newname}_module.i CMakeLists.txt python/src/MyClass.i python/src/MyClass_doc.i.in python/src/CMakeLists.txt lib/src/${module_newname}/MyClass.hxx lib/src/MyClass.cxx lib/include/${module_newname}/${module_Newname}.hxx lib/src/CMakeLists.txt lib/test/CMakeLists.txt lib/test/t_MyClass_std.cxx lib/test/t_MyClass_std.expout python/test/CMakeLists.txt python/test/t_MyClass_std.py python/doc/user_manual/user_manual.rst python/test/t_MyClass_std.expout"
 
     for file in $filelist_1
     do
@@ -114,7 +114,7 @@ case $# in
      fi
     done
 
-    filelist_2="python/src/MyClass.i python/src/MyClass_doc.i.in python/src/MyClassImplementation.i python/src/MyClassImplementation_doc.i.in lib/src/MyClass.cxx lib/src/MyClassImplementation.cxx lib/src/${module_newname}/MyClassImplementation.hxx lib/src/${module_newname}/MyClass.hxx lib/test/t_MyClass_std.cxx lib/test/t_MyClass_std.expout python/test/t_MyClass_std.py python/test/t_MyClass_std.expout"
+    filelist_2="python/src/MyClass.i python/src/MyClass_doc.i.in lib/src/MyClass.cxx lib/src/${module_newname}/MyClass.hxx lib/test/t_MyClass_std.cxx lib/test/t_MyClass_std.expout python/test/t_MyClass_std.py python/test/t_MyClass_std.expout"
 
     for file in $filelist_2
     do
