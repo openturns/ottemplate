@@ -1,8 +1,5 @@
 
-include_directories (${OPENTURNS_INCLUDE_DIRS})
-include_directories (${OPENTURNS_SWIG_INCLUDE_DIRS})
 add_definitions (${OPENTURNS_SWIG_DEFINITIONS})
-include_directories (${INTERNAL_INCLUDE_DIRS})
 
 # allows one to pass compile flags like -O1 to reduce memory usage
 set (SWIG_COMPILE_FLAGS "" CACHE STRING "C++ compiler flags used for wrapper code")
@@ -10,6 +7,8 @@ set (SWIG_COMPILE_FLAGS "" CACHE STRING "C++ compiler flags used for wrapper cod
 macro (ot_add_python_module MODULENAME SOURCEFILE)
   set_source_files_properties (${SOURCEFILE} PROPERTIES CPLUSPLUS ON)
   set_source_files_properties (${SOURCEFILE} PROPERTIES SWIG_MODULE_NAME ${MODULENAME})
+  set_source_files_properties (${SOURCEFILE} PROPERTIES INCLUDE_DIRECTORIES "${INTERNAL_INCLUDE_DIRS};${OPENTURNS_INCLUDE_DIRS};${OPENTURNS_SWIG_INCLUDE_DIRS}")
+
   ot_install_swig_file (${SOURCEFILE})
   if (${ARGC} GREATER 2)
     set (SWIG_MODULE_${MODULENAME}_python_EXTRA_DEPS ${ARGN})
@@ -46,18 +45,19 @@ macro (ot_add_python_module MODULENAME SOURCEFILE)
                       DEPENDS ${docstring_sources})
   list (APPEND SWIG_MODULE_${MODULENAME}_python_EXTRA_DEPS generate_${MODULENAME}_docstrings)
 
-  # swig_add_module is deprecated
-  swig_add_library (${MODULENAME}_python LANGUAGE python SOURCES ${SOURCEFILE} ${swig_other_sources})
-
-  # UseSWIG generates now standard target names
   set (module_target ${MODULENAME}_python)
 
-  swig_link_libraries (${MODULENAME}_python ottemplate)
-  target_include_directories (${MODULENAME}_python PRIVATE ${Python_INCLUDE_DIRS})
+  swig_add_library (${module_target} LANGUAGE python SOURCES ${SOURCEFILE} ${swig_other_sources})
+
+  # UseSWIG generates now standard target names
+
+  target_include_directories(${module_target} PRIVATE ${INTERNAL_INCLUDE_DIRS})
+  swig_link_libraries (${module_target} ottemplate)
 
   if (TARGET Python::Module)
     target_link_libraries (${module_target} Python::Module)
   else ()
+    target_include_directories (${module_target} PRIVATE ${Python_INCLUDE_DIRS})
     target_link_libraries_with_dynamic_lookup (${module_target} ${Python_LIBRARIES})
   endif ()
 
