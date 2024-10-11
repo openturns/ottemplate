@@ -52,16 +52,14 @@ set (OTTEMPLATE_DATA_PATH ${CMAKE_INSTALL_DATAROOTDIR})
 set (OTTEMPLATE_CONFIG_CMAKE_PATH ${CMAKE_INSTALL_LIBDIR}/cmake/ottemplate)
 set (OTTEMPLATE_DOC_PATH ${CMAKE_INSTALL_DOCDIR})
 
-set (CMAKE_CXX_STANDARD 11)
-
 if (BUILD_PYTHON)
   find_package (SWIG 3)
   include (${SWIG_USE_FILE})
 
-  if (CMAKE_VERSION VERSION_LESS 3.24)
-    find_package (Python 3.5 COMPONENTS Interpreter Development)
+  if (CMAKE_VERSION VERSION_LESS 3.28)
+    find_package (Python 3.6 COMPONENTS Interpreter Development)
   else ()
-    find_package (Python 3.5 COMPONENTS Interpreter Development.Module)
+    find_package (Python 3.6 COMPONENTS Interpreter Development.Module Development.SABIModule)
   endif ()
 
   if (Python_FOUND)
