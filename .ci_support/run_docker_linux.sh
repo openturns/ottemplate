@@ -6,13 +6,19 @@ cd /tmp
 mkdir build && cd build
 cmake -DCMAKE_INSTALL_PREFIX=~/.local \
       -DCMAKE_UNITY_BUILD=ON \
-      -DCMAKE_CXX_FLAGS="-Wall -Wextra -Wpedantic -Wshadow -Werror -D_GLIBCXX_ASSERTIONS" \
-      -DSWIG_COMPILE_FLAGS="-O1 -Wno-unused-parameter -Wno-shadow" \
+      -DCMAKE_CXX_FLAGS="-Wall -Wextra -Wpedantic -Wshadow -Werror -D_GLIBCXX_ASSERTIONS --coverage" \
+      -DSWIG_COMPILE_FLAGS="-O1 -Wno-unused-parameter" \
       -DUSE_SPHINX=ON -DSPHINX_FLAGS="-W -T -j4" \
       /io
 make install
 make tests
 ctest --output-on-failure --timeout 100 ${MAKEFLAGS}
+
+# coverage
+gcov `find lib/src/ -name "*.gcno"`
+lcov --capture --directory . --output-file coverage.info --include "*.cxx"
+genhtml --output-directory coverage coverage.info
+cp -v coverage.info coverage
 
 uid=$1
 gid=$2
