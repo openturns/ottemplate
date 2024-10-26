@@ -53,7 +53,7 @@ if (BUILD_PYTHON)
   find_package (SWIG 3)
   include (${SWIG_USE_FILE})
 
-  if (CMAKE_VERSION VERSION_LESS 3.28)
+  if (CMAKE_VERSION VERSION_LESS 3.26)
     find_package (Python 3.6 COMPONENTS Interpreter Development)
   else ()
     find_package (Python 3.6 COMPONENTS Interpreter Development.Module Development.SABIModule)
