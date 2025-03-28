@@ -13,7 +13,11 @@ Template module class."
 // ---------------------------------------------------------------------
 
 %feature("docstring") OTTEMPLATE::MyClass::square
-"Square of a point.
+R"RAW(Square of a point.
+
+.. math::
+
+    x_i^2
 
 Parameters
 ----------
@@ -32,5 +36,5 @@ Examples
 >>> a = ottemplate.MyClass()
 >>> point = ot.Point([1.0, 2.0, 3.0])
 >>> a.square(point)
-class=Point name=Unnamed dimension=3 values=[1,4,9]"
+class=Point name=Unnamed dimension=3 values=[1,4,9])RAW"
 

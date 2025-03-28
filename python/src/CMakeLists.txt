@@ -15,41 +15,17 @@ macro (ot_add_python_module MODULENAME SOURCEFILE)
   endif ()
 
   set (swig_other_sources)
-  set (docstring_sources)
   foreach (it ${ARGN})
     if (${it} MATCHES ".*\\.i$")
       ot_install_swig_file (${it})
-    elseif (${it} MATCHES ".*_doc\\.i\\.in$")
-      list (APPEND docstring_sources ${it})
-
-      get_filename_component (DOCSTRING_FILE_BASENAME ${it} NAME_WE)
-      ot_install_swig_file (${CMAKE_CURRENT_BINARY_DIR}/${DOCSTRING_FILE_BASENAME}.i)
     else ()
       list (APPEND swig_other_sources "${it}")
     endif ()
   endforeach ()
 
-  # https://github.com/swig/swig/issues/1273
-  option (SWIG_FORCE_DOUBLE_ESCAPE_BACKSLASH "Force double escaping of backslashes" OFF)
-  mark_as_advanced (SWIG_FORCE_DOUBLE_ESCAPE_BACKSLASH)
-  set (TIMES x1)
-  if ((SWIG_VERSION VERSION_LESS 4) OR SWIG_FORCE_DOUBLE_ESCAPE_BACKSLASH)
-    set (TIMES x2)
-  endif ()
-
-  # handle docstring generation
-  add_custom_target (generate_${MODULENAME}_docstrings
-                      COMMAND ${CMAKE_COMMAND} -DDOCSTRING_SOURCES="${docstring_sources}"
-                      -DCURRENT_SOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR} -DTIMES=${TIMES}
-                      -P ${CMAKE_SOURCE_DIR}/cmake/escape_backslash.cmake
-                      DEPENDS ${docstring_sources})
-  list (APPEND SWIG_MODULE_${MODULENAME}_python_EXTRA_DEPS generate_${MODULENAME}_docstrings)
-
   set (module_target ${MODULENAME}_python)
 
   swig_add_library (${module_target} LANGUAGE python SOURCES ${SOURCEFILE} ${swig_other_sources})
-
-  # UseSWIG generates now standard target names
 
   target_include_directories(${module_target} PRIVATE ${INTERNAL_INCLUDE_DIRS})
   swig_link_libraries (${module_target} ottemplate)
@@ -78,7 +54,7 @@ endmacro ()
 
 
 ot_add_python_module( ${PACKAGE_NAME} ${PACKAGE_NAME}_module.i 
-                      MyClass.i MyClass_doc.i.in
+                      MyClass.i MyClass_doc.i
                     )
 
 
