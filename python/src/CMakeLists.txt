@@ -28,19 +28,12 @@ macro (ot_add_python_module MODULENAME SOURCEFILE)
   swig_add_library (${module_target} LANGUAGE python SOURCES ${SOURCEFILE} ${swig_other_sources})
 
   target_include_directories(${module_target} PRIVATE ${INTERNAL_INCLUDE_DIRS})
-  swig_link_libraries (${module_target} ottemplate)
 
-  if (TARGET Python::Module)
-    target_link_libraries (${module_target} Python::Module)
-  else ()
-    target_include_directories (${module_target} PRIVATE ${Python_INCLUDE_DIRS})
-    target_link_libraries_with_dynamic_lookup (${module_target} ${Python_LIBRARIES})
-  endif ()
+  target_link_libraries (${module_target} ottemplate)
+  target_link_libraries (${module_target} Python::Module)
 
   set_target_properties (${module_target} PROPERTIES OUTPUT_NAME ${MODULENAME})
-
   set_target_properties (${module_target} PROPERTIES COMPILE_FLAGS "${SWIG_COMPILE_FLAGS}")
-
   set_target_properties (${module_target} PROPERTIES UNITY_BUILD OFF)
 
   install (FILES ${CMAKE_CURRENT_BINARY_DIR}/${MODULENAME}.py
