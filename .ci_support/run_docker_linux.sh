@@ -4,7 +4,7 @@ set -xe
 
 cd /tmp
 mkdir build && cd build
-cmake -DCMAKE_INSTALL_PREFIX=~/.local \
+cmake -DCMAKE_INSTALL_PREFIX=${HOME}/.local \
       -DCMAKE_UNITY_BUILD=ON \
       -DCMAKE_CXX_FLAGS="-Wall -Wextra -Wpedantic -Wshadow -Werror -D_GLIBCXX_ASSERTIONS --coverage" \
       -DSWIG_COMPILE_FLAGS="-O1 -Wno-unused-parameter" \
