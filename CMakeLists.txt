@@ -5,7 +5,7 @@ option (USE_SPHINX                   "Use sphinx for documentation"             
 option (BUILD_SHARED_LIBS            "Build shared libraries"                                                ON)
 
 # By default, build in Release mode. Must appear before project() command
-set( CMAKE_BUILD_TYPE Release CACHE STRING "Build type")
+set (CMAKE_BUILD_TYPE Release CACHE STRING "Build type")
 
 project (ottemplate)
 
