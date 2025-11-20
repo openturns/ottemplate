@@ -14,19 +14,6 @@ string (TOLOWER ${CMAKE_PROJECT_NAME} PACKAGE_NAME)
 # set module dir to find custom scripts
 list (APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
-if (POLICY CMP0042)
-  # MACOSX_RPATH is enabled by default
-  cmake_policy(SET CMP0042 NEW)
-endif()
-if (POLICY CMP0078)
-  # UseSWIG generates standard target names
-  cmake_policy(SET CMP0078 NEW)
-endif()
-if (POLICY CMP0086)
-  # UseSWIG honors SWIG_MODULE_NAME via -module flag
-  cmake_policy(SET CMP0086 NEW)
-endif()
-
 find_package (OpenTURNS CONFIG REQUIRED)
 message (STATUS "Found OpenTURNS: ${OPENTURNS_ROOT_DIR} (found version \"${OPENTURNS_VERSION_STRING}\")")
 
