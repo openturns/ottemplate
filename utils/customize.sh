@@ -74,7 +74,7 @@ case $# in
       fi
     done
 
-    filelist_2="cmake/UseOTTemplate.cmake cmake/OTTemplateConfig.cmake.in lib/src/ottemplate lib/include/ottemplate lib/include/${module_newname}/OTTemplateprivate.hxx lib/include/${module_newname}/OTTemplate.hxx python/src/ottemplate_module.i distro/rpm/ottemplate.spec"
+    filelist_2="cmake/OTTemplateConfig.cmake.in lib/src/ottemplate lib/include/ottemplate lib/include/${module_newname}/OTTemplateprivate.hxx lib/include/${module_newname}/OTTemplate.hxx python/src/ottemplate_module.i distro/rpm/ottemplate.spec"
 
     for file in $filelist_2
     do
