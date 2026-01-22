@@ -15,11 +15,11 @@ Compilation
 .. code-block:: bash
 
     cd ottemplate
-    mkdir -p build && cd build
     cmake \
       -DCMAKE_INSTALL_PREFIX=$PWD/install \
       -DOpenTURNS_DIR=$PWD/../../openturns/build/install/lib/cmake/openturns \
-      ..
+      -B build .
+    cmake --build build --target install
 
 Source code structure
 ---------------------
