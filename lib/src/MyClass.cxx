@@ -26,7 +26,7 @@ using namespace OT;
 namespace OTTEMPLATE
 {
 
-CLASSNAMEINIT(MyClass);
+CLASSNAMEINIT(MyClass)
 
 static Factory<MyClass> Factory_MyClass;
 
