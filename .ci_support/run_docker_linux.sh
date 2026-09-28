@@ -15,8 +15,7 @@ make tests
 ctest --output-on-failure --timeout 100 ${MAKEFLAGS}
 
 # coverage
-gcov `find lib/src/ -name "*.gcno"`
-lcov --capture --directory lib --output-file coverage.info --include "*.cxx" -j 4
+lcov --capture --directory lib/src/ --output-file coverage.info --include "*.cxx" ${MAKEFLAGS}
 genhtml --output-directory coverage coverage.info
 cp -v coverage.info coverage
 
@@ -25,4 +24,6 @@ if test -n "${UID_GID}"
 then
   sudo chown -R ${UID_GID} ~/.local/share/doc/*/html
   sudo cp -pr ~/.local/share/doc/*/html /io
+  sudo chown -R ${UID_GID} coverage
+  sudo cp -pr coverage /io
 fi
