@@ -12,7 +12,7 @@ include_directories (${INTERNAL_INCLUDE_DIRS})
 add_library (ottemplate ${SOURCEFILES})
 set_target_properties (ottemplate PROPERTIES POSITION_INDEPENDENT_CODE ON)
 if (BUILD_SHARED_LIBS)
-  set_target_properties (ottemplate PROPERTIES COMPILE_DEFINITIONS "OTTEMPLATE_DLL_EXPORTS")
+  target_compile_definitions (ottemplate PRIVATE OTTEMPLATE_DLL_EXPORTS)
 endif ()
 
 if (NOT DEFINED LIB_VERSION) 
